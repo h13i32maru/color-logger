@@ -1,0 +1,11 @@
+{
+  "source": "./src",
+  "pattern": "\\.js$",
+  "destination": "./out/esdoc",
+  "readme": "./README.md",
+  "package": "./package.json",
+  "private": false,
+  "importPathPrefix": "",
+  "styles": [],
+  "scripts": []
+}
