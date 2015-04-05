@@ -26,8 +26,10 @@ let levelToColor = {
  * @example
  * import Logger from 'color-logger'
  *
+ * // simple usage
  * Logger.v('verbose log');
  *
+ * // tag usage
  * let logger = new Logger('MyTag');
  * logger.d('debug log');
  */

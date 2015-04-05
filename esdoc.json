@@ -5,7 +5,7 @@
   "readme": "./README.md",
   "package": "./package.json",
   "private": false,
-  "importPathPrefix": "",
+  "importPathPrefix": "out/",
   "styles": [],
   "scripts": []
 }

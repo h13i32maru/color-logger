@@ -12,7 +12,8 @@
     "build": "bash ./script/build.sh",
     "test": "bash ./script/test.sh",
     "test-es5": "bash ./script/test-es5.sh",
-    "esdoc": "bash ./script/esdoc.sh"
+    "esdoc": "bash ./script/esdoc.sh",
+    "start": "bash ./script/server.sh"
   },
   "dependencies": {
   },
@@ -22,7 +23,8 @@
     "power-assert": "",
     "espower-loader": "",
     "istanbul": "",
-    "coveralls": ""
+    "coveralls": "",
+    "http-server": ""
   },
   "keywords": [
     "logger",
