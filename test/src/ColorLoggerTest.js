@@ -66,4 +66,10 @@ describe('ColorLogger:', ()=>{
   ]
 }`));
   });
+
+  it('does not show log.', ()=>{
+    Logger.debug = false;
+    assert.equal(Logger.e('foo'), '');
+    Logger.debug = true;
+  });
 });
