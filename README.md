@@ -32,3 +32,9 @@ Logger.e('error log');
 ```
 
 <img src='./misc/color-logger.png' width='600'>
+
+## API Reference
+https://h13i32maru.github.io/color-logger/
+
+## License
+MIT
