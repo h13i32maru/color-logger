@@ -10,8 +10,6 @@ npm install color-logger
 
 ## Example
 
-simple usage.
-
 ```js
 import Logger from 'color-logger';
 

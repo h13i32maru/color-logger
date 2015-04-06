@@ -11,17 +11,17 @@ let levelToColor = {
  * display colorful log. now, not support browser.
  *
  * format:
- * "[LogLevel] [Time] [File] inputted log text"
+ * ``[LogLevel] [Time] [File] log text``
  *
  * format with tag:
- * "[LogLevel] [Time] [File] [Tag] inputted log text"
+ * ``[LogLevel] [Time] [File] [Tag] log text``
  *
  * log level and color:
- * verbose: purple
- * debug: blue
- * info: green
- * warning: yellow
- * error: red
+ * - verbose: purple
+ * - debug: blue
+ * - info: green
+ * - warning: yellow
+ * - error: red
  *
  * @example
  * import Logger from 'color-logger'
@@ -54,7 +54,7 @@ export default class ColorLogger {
   }
 
   /**
-   * if true, display log. default is true.
+   * if false, not display log. default is true.
    */
   static set debug(v) {
     this._debug = v;
