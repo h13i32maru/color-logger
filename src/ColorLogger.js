@@ -53,7 +53,7 @@ export class ColorLogger {
     } catch (e) {
       const lines = e.stack.split('\n');
       const line = lines[4];
-      const matched = line.match(/\(.*?([^/]*:\d+:\d+)\)$/);
+      const matched = line.match(/([\w\d\-_.]*:\d+:\d+)/);
       info = matched[1];
     }
 
