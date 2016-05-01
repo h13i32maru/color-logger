@@ -60,10 +60,17 @@ export class ColorLogger {
     return info;
   }
 
+  /**
+   * clear all logs.
+   */
   clearAllLogs() {
     this._allLogs = [];
   }
 
+  /**
+   * all logs
+   * @type {String[]}
+   */
   get allLogs() {
     return [].concat(this._allLogs);
   }

@@ -1,6 +1,6 @@
 {
   "name": "color-logger",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Colorful Logger",
   "author": "h13i32maru",
   "license": "MIT",
@@ -17,6 +17,8 @@
   "dependencies": {
   },
   "devDependencies": {
+    "esdoc-importpath-plugin": "0.0.1",
+    "esdoc": "0.4.6",
     "mocha": "2.4.5",
     "istanbul": "0.4.3",
     "coveralls": "2.11.9",

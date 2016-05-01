@@ -5,7 +5,16 @@
   "readme": "./README.md",
   "package": "./package.json",
   "private": false,
-  "importPathPrefix": "out/",
   "styles": [],
-  "scripts": []
+  "scripts": [],
+  "plugins": [
+    {
+      "name": "esdoc-importpath-plugin",
+      "option": {
+        "replaces": [
+          {"from": "^src/", "to": "out/src/"}
+        ]
+      }
+    }
+  ]
 }
