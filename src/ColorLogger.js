@@ -1,5 +1,5 @@
 // ASCII ESCAPE SEQUENCE http://www5c.biglobe.ne.jp/~ecb/assembler2/b_2.html
-let levelToColor = {
+const levelToColor = {
   v: '[35m[V]', // purple
   d: '[34m[D]', // blue
   i: '[32m[I]', // green
@@ -33,30 +33,45 @@ let levelToColor = {
  * let logger = new Logger('MyTag');
  * logger.d('debug log');
  */
-export default class ColorLogger {
+export class ColorLogger {
+  /**
+   * create instance.
+   */
+  constructor() {
+    this._allLogs = [];
+  }
+
   /**
    * log information.
    * @return {string} - file name and line number.
    * @private
    */
-  static _getInfo() {
+  _getInfo() {
     let info;
     try {
       throw new Error();
     } catch (e) {
-      let lines = e.stack.split('\n');
-      let line = lines[4];
-      let matched = line.match(/\/([^/]*?:\d+:\d+)/);
+      const lines = e.stack.split('\n');
+      const line = lines[4];
+      const matched = line.match(/\(.*?([^/]*:\d+:\d+)\)$/);
       info = matched[1];
     }
 
     return info;
   }
 
+  clearAllLogs() {
+    this._allLogs = [];
+  }
+
+  get allLogs() {
+    return [].concat(this._allLogs);
+  }
+
   /**
    * if false, not display log. default is true.
    */
-  static set debug(v) {
+  set debug(v) {
     this._debug = v;
   }
 
@@ -67,11 +82,9 @@ export default class ColorLogger {
    * @returns {string} - formatted log message.
    * @private
    */
-  static _output(level, ...msg) {
-    if (!this._debug) return '';
-
-    let text = [];
-    for (let m of msg) {
+  _output(level, ...msg) {
+    const text = [];
+    for (const m of msg) {
       if (typeof m === 'object') {
         text.push(JSON.stringify(m, null, 2));
       } else {
@@ -79,12 +92,29 @@ export default class ColorLogger {
       }
     }
 
-    let color = levelToColor[level];
-    let info = this._getInfo();
-    let d = new Date();
-    let now = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
-    let log = `${color} [${now}] [${info}] ${text.join(' ')}[0m`;
-    console.log(log);
+    const color = levelToColor[level];
+    const info = this._getInfo();
+
+    const d = new Date();
+    let month = d.getMonth() + 1;
+    if (month < 10) month = `0${month}`;
+    let date = d.getDate();
+    if (date < 10) date = `0${date}`;
+    let hour = d.getHours();
+    if (hour < 10) hour = `0${hour}`;
+    let minutes = d.getMinutes();
+    if (minutes < 10) minutes = `0${minutes}`;
+    let sec = d.getSeconds();
+    if (sec < 10) sec = `0${sec}`;
+    const now = `${d.getFullYear()}-${month}-${date}T${hour}:${minutes}:${sec}.${d.getMilliseconds()}Z`;
+
+    const log = `${color} [${now}] [${info}] ${text.join(' ')}[0m`;
+
+    this._allLogs.push(log);
+    if (this._allLogs.length > 10000) this._allLogs.shift();
+
+    if (this._debug) console.log(log);
+
     return log;
   }
 
@@ -93,7 +123,7 @@ export default class ColorLogger {
    * @param {...*} msg - log message.
    * @returns {string} formatted log message.
    */
-  static v(...msg) {
+  v(...msg) {
     return this._output('v', ...msg);
   }
 
@@ -102,7 +132,7 @@ export default class ColorLogger {
    * @param {...*} msg - log message.
    * @returns {string} formatted log message.
    */
-  static d(...msg) {
+  d(...msg) {
     return this._output('d', ...msg);
   }
 
@@ -111,7 +141,7 @@ export default class ColorLogger {
    * @param {...*} msg - log message.
    * @returns {string} formatted log message.
    */
-  static i(...msg) {
+  i(...msg) {
     return this._output('i', ...msg);
   }
 
@@ -120,7 +150,7 @@ export default class ColorLogger {
    * @param {...*} msg - log message.
    * @returns {string} formatted log message.
    */
-  static w(...msg) {
+  w(...msg) {
     return this._output('w', ...msg);
   }
 
@@ -129,62 +159,11 @@ export default class ColorLogger {
    * @param {...*} msg - log message.
    * @returns {string} formatted log message.
    */
-  static e(...msg) {
-    return this._output('e', ...msg);
-  }
-
-  /**
-   * create instance.
-   * @param {string} tag - tag text.
-   */
-  constructor(tag) {
-    this._tag = tag;
-  }
-
-  /**
-   * display verbose(purple) log and tag.
-   * @param {...*} msg - log message.
-   * @returns {string} formatted log message.
-   */
-  v(...msg) {
-    return this.constructor._output('v', `[${this._tag}]`, ...msg);
-  }
-
-  /**
-   * display debug(blue) log and tag.
-   * @param {...*} msg - log message.
-   * @returns {string} formatted log message.
-   */
-  d(...msg) {
-    return this.constructor._output('d', `[${this._tag}]`, ...msg);
-  }
-
-  /**
-   * display info(green) log and tag.
-   * @param {...*} msg - log message.
-   * @returns {string} formatted log message.
-   */
-  i(...msg) {
-    return this.constructor._output('i', `[${this._tag}]`, ...msg);
-  }
-
-  /**
-   * display warning(yellow) log and tag.
-   * @param {...*} msg - log message.
-   * @returns {string} formatted log message.
-   */
-  w(...msg) {
-    return this.constructor._output('w', `[${this._tag}]`, ...msg);
-  }
-
-  /**
-   * display error(red) log and tag.
-   * @param {...*} msg - log message.
-   * @returns {string} formatted log message.
-   */
   e(...msg) {
-    return this.constructor._output('e', `[${this._tag}]`, ...msg);
+    return this._output('e', ...msg);
   }
 }
 
-ColorLogger.debug = true;
+const logger = new ColorLogger();
+logger.debug = true;
+export default logger;

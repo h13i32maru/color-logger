@@ -1,4 +1,3 @@
-import babel from 'babel/polyfill';
 import assert from 'assert';
 import Logger from '../../src/ColorLogger.js';
 
@@ -7,8 +6,18 @@ describe('ColorLogger:', ()=>{
     level = level.toUpperCase();
     assert(actual.includes(`[${level}]`));
 
-    let d = new Date();
-    let now = `\\[${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.\\d+\\]`;
+    const d = new Date();
+    let month = d.getMonth() + 1;
+    if (month < 10) month = `0${month}`;
+    let date = d.getDate();
+    if (date < 10) date = `0${date}`;
+    let hour = d.getHours();
+    if (hour < 10) hour = `0${hour}`;
+    let minutes = d.getMinutes();
+    if (minutes < 10) minutes = `0${minutes}`;
+    let sec = d.getSeconds();
+    if (sec < 10) sec = `0${sec}`;
+    const now = `\\[${d.getFullYear()}-${month}-${date}T${hour}:${minutes}:${sec}.\\d+Z\\]`;
     assert(actual.match(new RegExp(now)));
 
     assert(actual.match(/\[ColorLoggerTest.js:\d+:\d+\]/));
@@ -35,26 +44,6 @@ describe('ColorLogger:', ()=>{
     test(log, 'e', 'error log');
   });
 
-  it('show tag log.', ()=>{
-    let logger = new Logger('MyTag');
-    let log;
-
-    log = logger.v('verbose log');
-    test(log, 'v', '[MyTag] verbose log');
-
-    log = logger.d('debug log');
-    test(log, 'd', '[MyTag] debug log');
-
-    log = logger.i('info log');
-    test(log, 'i', '[MyTag] info log');
-
-    log = logger.w('warning log');
-    test(log, 'w', '[MyTag] warning log');
-
-    log = logger.e('error log');
-    test(log, 'e', '[MyTag] error log');
-  });
-
   it ('show log with object.', ()=>{
     let log = Logger.v({foo: 123, bar: [1, 2, 3]});
     assert(log.includes(`{
@@ -69,7 +58,20 @@ describe('ColorLogger:', ()=>{
 
   it('does not show log.', ()=>{
     Logger.debug = false;
-    assert.equal(Logger.e('foo'), '');
+    const orig = console.log;
+    console.log = ()=> {assert(false)};
+    Logger.e('foo');
+    console.log = orig;
     Logger.debug = true;
+  });
+
+  it('get all logs', ()=>{
+    Logger.clearAllLogs();
+    Logger.d('foo');
+    Logger.d('bar');
+    const logs = Logger.allLogs;
+    assert(logs.length === 2);
+    assert(logs[0].includes('foo'));
+    assert(logs[1].includes('bar'));
   });
 });
