@@ -42,6 +42,9 @@ describe('ColorLogger:', ()=>{
 
     log = Logger.e('error log');
     test(log, 'e', 'error log');
+
+    log = Logger.n('normal log');
+    test(log, 'n', 'normal log');
   });
 
   it ('show log with object.', ()=>{

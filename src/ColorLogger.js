@@ -1,5 +1,6 @@
 // ASCII ESCAPE SEQUENCE http://www5c.biglobe.ne.jp/~ecb/assembler2/b_2.html
 const levelToColor = {
+  n: '[N]', // no color
   v: '[35m[V]', // purple
   d: '[34m[D]', // blue
   i: '[32m[I]', // green
@@ -116,8 +117,9 @@ export class ColorLogger {
     const now = `${d.getFullYear()}-${month}-${date}T${hour}:${minutes}:${sec}.${d.getMilliseconds()}Z`;
 
     const log = `${color} [${now}] [${info}] ${text.join(' ')}[0m`;
+    const offColorLog = `[${level.toUpperCase()}] [${now}] [${info}] ${text.join(' ')}`;
 
-    this._allLogs.push(log);
+    this._allLogs.push(offColorLog);
     if (this._allLogs.length > 10000) this._allLogs.shift();
 
     if (this._debug) console.log(log);
@@ -141,6 +143,15 @@ export class ColorLogger {
    */
   d(...msg) {
     return this._output('d', ...msg);
+  }
+
+  /**
+   * display normal(no color) log.
+   * @param {...*} msg - log message.
+   * @returns {string} formatted log message.
+   */
+  n(...msg) {
+    return this._output('n', ...msg);
   }
 
   /**
